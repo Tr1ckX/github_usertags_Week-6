@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js'></script>
+
+  <form id="userForm">
+    <input type="text" placeholder="Enter Github Username" id="username">
+    <input type="submit" value="Load User">
+  </form>
+
+  <div class="profile-container">1</div>
+
+  <template id='profile_template'>
+
+    <img src='{{ avatar_url }}'>
+
+    <p >{{ login }}</p>
+
+    <p >{{ public_repos }}</p>
+
+    <p >{{ followers }}</p>
+  </template>
+  <script>
+    $(document).ready(function() {
+      var userData;
+      $('#userForm').on("submit", function(event) {
+        var username = $('#username').val();
+        event.preventDefault();
+        // userData = $.get('https://api.github.com/users/' + username);
+        $.get('https://api.github.com/users/' + username + "?client_id=Tr1ckX&client_secret=58048cf3a81631b05c6e5053f89a57bf12e813a8", function(user) {
+          var newProfile = Mustache.render($('#profile_template').html(), user);
+          $('.profile-container').append(newProfile);
+
+        });
+      });
+    });
+  </script>
+
+
+</body>
+</html>

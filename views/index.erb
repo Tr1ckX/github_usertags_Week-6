@@ -32,7 +32,7 @@
         var username = $('#username').val();
         event.preventDefault();
         // userData = $.get('https://api.github.com/users/' + username);
-        $.get('https://api.github.com/users/' + username + "?client_id=Tr1ckX&client_secret=58048cf3a81631b05c6e5053f89a57bf12e813a8", function(user) {
+        $.get('https://api.github.com/users/' + username + "?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8", function(user) {
           var newProfile = Mustache.render($('#profile_template').html(), user);
           $('.profile-container').append(newProfile);
 

@@ -37,9 +37,7 @@
       $('.profile-container').prepend(newProfile).slideDown();
     }).error(function(){
       alert('Cannot find ' + username);
-    }).always({
-      $('#username').val('');
-    });
+    }).always($('#username').val(''));
   };
 
   $(document).ready(function() {

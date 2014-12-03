@@ -13,32 +13,46 @@
     <input type="submit" value="Load User">
   </form>
 
-  <div class="profile-container">1</div>
+  <div class="profile-container"></div>
 
-  <template id='profile_template'>
+  <template id='profile-template'>
+    <div class="profile">
+      <img src='{{ avatar_url }}'>
 
-    <img src='{{ avatar_url }}'>
+      <p >{{ login }}</p>
 
-    <p >{{ login }}</p>
+      <p >{{ public_repos }}</p>
 
-    <p >{{ public_repos }}</p>
+      <p >{{ followers }}</p>
 
-    <p >{{ followers }}</p>
+      <a class="close" href='#'>✖︎</a>
+      <br clear="all">
+    </div>
   </template>
-  <script>
-    $(document).ready(function() {
-      var userData;
-      $('#userForm').on("submit", function(event) {
-        var username = $('#username').val();
-        event.preventDefault();
-        // userData = $.get('https://api.github.com/users/' + username);
-        $.get('https://api.github.com/users/' + username + "?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8", function(user) {
-          var newProfile = Mustache.render($('#profile_template').html(), user);
-          $('.profile-container').append(newProfile);
 
-        });
+  <script>
+  function addProfileFromUsername(username){
+    $.get('https://api.github.com/users/'+ username + "?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8",function(user){
+      var newProfile = Mustache.render($('#profile-template').html(), user);
+      $('.profile-container').prepend(newProfile).slideDown();
+    }).error(function(){
+      alert('Cannot find ' + username);
+    }).always({
+      $('#username').val('');
+    });
+  };
+
+  $(document).ready(function() {
+    $('#userForm').on("submit", function(event) {
+      event.preventDefault();
+      addProfileFromUsername($('#username').val());
+    });
+    $('.profile-container').on('click', '.close', function(){
+      $(this).closest('.profile').slideUp(function(){
+        $(this).remove();
       });
     });
+  });
   </script>
 
 

@@ -26,15 +26,19 @@
     <div class="profile">
       <img src='{{ avatar_url }}' width="100" heigth="100">
 
-      <p >{{ login }}</p>
+      <p>{{ login }}</p>
 
-      <p >{{ public_repos }}</p>
+      <p>{{ public_repos }}</p>
 
-      <p >{{ followers }}</p>
+      <p>{{ followers }}</p>
 
       <a class="close" href='#'>✖︎</a>
       <br clear="all">
     </div>
+  </template>
+
+  <template id='newProfile-template'>
+    <p>User repo nr: {{ total_count }}</p>
   </template>
 
   <script>
@@ -52,19 +56,31 @@
     });
   }
 
+  function stats(username){
+    $.get('https://api.github.com/search/repositories?q=user:'+ username + "&access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8",function(user){
+      var newProfile = Mustache.render($('#newProfile-template').html(), user);
+      $('.profile:first-child').append(newProfile);
+    });
+  }
+
   $(document).ready(function() {
+
     $('#userForm').on("submit", function(event) {
       event.preventDefault();
       addProfileFromUsername($('#username').val());
+      stats($('#username').val());
     });
+
     $('.profile-container').on('click', '.close', function(){
       $(this).closest('.profile').slideUp(function(){
         $(this).remove();
       });
     });
+
     $('modal').on('click', '.close',function(){
       $('modal').removeClass('shown');
     })
+
   });
   </script>
 

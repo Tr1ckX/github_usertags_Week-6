@@ -32,13 +32,16 @@
 
       <p>{{ followers }}</p>
 
+
+
       <a class="close" href='#'>✖︎</a>
       <br clear="all">
+      <p>Repositories:</p>
     </div>
   </template>
 
   <template id='newProfile-template'>
-    <p>User repo nr: {{ total_count }}</p>
+    <p> {{ name }}: {{ length }} </p>
   </template>
 
   <script>
@@ -56,11 +59,25 @@
     });
   }
 
-  function stats(username){
-    $.get('https://api.github.com/search/repositories?q=user:'+ username + "&access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8",function(user){
-      var newProfile = Mustache.render($('#newProfile-template').html(), user);
-      $('.profile:first-child').append(newProfile);
-    });
+
+var objectAssign = function(object, key, value){
+    object[key] = value;
+}
+
+  function parsingRepo(username) {
+    $.get('https://api.github.com/search/repositories?q=user:'+ username + "&access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8")
+      .done(function(response) {
+        total = response.items.length
+        $.each(response.items, function printRepository(i, repo) {
+
+          $.get('https://api.github.com/repos/'+ username + '/' + repo.name + "/commits?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8")
+            .done(function(commitsArray) {
+              objectAssign(repo, 'length', commitsArray.length)
+              var newProfile = Mustache.render($('#newProfile-template').html(), repo);
+              $('.profile:first-child').append(newProfile);
+            });
+         });
+       })
   }
 
   $(document).ready(function() {
@@ -68,7 +85,8 @@
     $('#userForm').on("submit", function(event) {
       event.preventDefault();
       addProfileFromUsername($('#username').val());
-      stats($('#username').val());
+      // stats($('#username').val());
+      parsingRepo($('#username').val());
     });
 
     $('.profile-container').on('click', '.close', function(){

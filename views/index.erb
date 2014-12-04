@@ -43,6 +43,7 @@
     $.get('https://api.github.com/users/'+ username + "?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8",function(user){
       var newProfile = Mustache.render($('#profile-template').html(), user);
       $('.profile-container').prepend(newProfile).slideDown();
+      $('modal').removeClass('shown');
     }).error(function(){
       $('modal').addClass('shown');
     }).always(function(){

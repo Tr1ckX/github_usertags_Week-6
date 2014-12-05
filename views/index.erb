@@ -14,6 +14,7 @@
     <input type="submit" value="Load User">
   </form>
 
+  <div class="rate_limit"></div>
   <div class="profile-container"><img src='spinner.gif' class='spinner'></div>
 
   <modal>
@@ -44,6 +45,11 @@
     <p> {{ name }}: {{ length }} </p>
   </template>
 
+  <template id='rateLimit-template'>
+     rate limit: {{ rate.limit }}
+          remaining: {{ rate.remaining}}
+  </template>
+
   <script>
   function addProfileFromUsername(username){
     $('.spinner').show();
@@ -69,7 +75,6 @@ var objectAssign = function(object, key, value){
       .done(function(response) {
         total = response.items.length
         $.each(response.items, function printRepository(i, repo) {
-
           $.get('https://api.github.com/repos/'+ username + '/' + repo.name + "/commits?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8")
             .done(function(commitsArray) {
               objectAssign(repo, 'length', commitsArray.length)
@@ -80,6 +85,14 @@ var objectAssign = function(object, key, value){
        })
   }
 
+  function rateLimit() {
+    $.get('https://api.github.com/rate_limit?access_token=58048cf3a81631b05c6e5053f89a57bf12e813a8').done(function(rateLimit){
+      var newProfile = Mustache.render($('#rateLimit-template').html(), rateLimit);
+      // $('.rate_limit').remove();
+      $('.rate_limit').text(newProfile);
+    });
+  }
+
   $(document).ready(function() {
 
     $('#userForm').on("submit", function(event) {
@@ -87,6 +100,7 @@ var objectAssign = function(object, key, value){
       addProfileFromUsername($('#username').val());
       // stats($('#username').val());
       parsingRepo($('#username').val());
+      rateLimit();
     });
 
     $('.profile-container').on('click', '.close', function(){

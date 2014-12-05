@@ -30,3 +30,9 @@ modal.shown {
   opacity: 1;
   -webkit-transform: scale(1);
 }
+
+.rate_limit {
+  position: fixed;
+  left: 40%;
+  /*align: middle;*/
+}

@@ -1,4 +1,4 @@
-Bookmark manager for everyone!
+Search for a Github username 
 ==========
 <div>
 <img src = https://img.shields.io/badge/%20-GitHub-orange.svg>
@@ -11,7 +11,7 @@ Bookmark manager for everyone!
 
 <h5> Sixth week at [Makers Academy](http://www.makersacademy.com) 
 
-To continue our path on the Javascript we had to create a github username search function
+To continue our path on the Javascript we had to display a github user repos and it's commits.
   - using github API
   - processing JSON objects with mustache.js
   - Javascript and CSS interaction

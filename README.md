@@ -15,6 +15,7 @@ To continue our path on the Javascript we had to create a github username search
   - using github API
   - processing JSON objects with mustache.js
   - Javascript and CSS interaction
+  - chaining JS functions and the lovely callbacks
 
 
 You can try it [here](https://guarded-stream-9271.herokuapp.com)
